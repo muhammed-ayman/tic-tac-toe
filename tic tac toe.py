@@ -81,7 +81,7 @@ def play(row, column, value):
     else:
         print("""
 
- {!}: Unvalid Position!
+ {!}: Invalid Position!
 
         """)
         if value == "X":
