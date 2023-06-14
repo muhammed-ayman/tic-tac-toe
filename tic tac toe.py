@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from typing import List, Optional
+import json
 
 class Player:
     """
@@ -60,6 +61,15 @@ class TicTacToeGame:
         self.current_player_index: int = 0
         self.board = Board()
         self.buttons: List[tk.Button] = []
+        self.config = self.load_game_config()
+
+    def load_game_config(self) -> dict:
+        """
+        Loads the game configuration from the 'game_config.json' file.
+        """
+        with open('game_config.json') as config_file:
+            config = json.load(config_file)
+        return config
 
     def create_button(self, row: int, column: int) -> None:
         """
@@ -132,31 +142,31 @@ class TicTacToeGame:
         """
         self.clear_player_input_screen()
 
-        player1_label = tk.Label(self.window, text="Player 1")
+        player1_label = tk.Label(self.window, text=self.config['player1_label'])
         player1_label.grid(row=0, column=0, padx=5, pady=5)
-        player1_name_label = tk.Label(self.window, text="Name:")
+        player1_name_label = tk.Label(self.window, text=self.config['name_label'])
         player1_name_label.grid(row=1, column=0, padx=5, pady=5)
         player1_name_entry = tk.Entry(self.window)
         player1_name_entry.grid(row=1, column=1, padx=5, pady=5)
-        symbol1_label = tk.Label(self.window, text="Symbol (X/O):")
+        symbol1_label = tk.Label(self.window, text=self.config['symbol_label'])
         symbol1_label.grid(row=2, column=0, padx=5, pady=5)
         symbol1_entry = tk.Entry(self.window)
         symbol1_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        player2_label = tk.Label(self.window, text="Player 2")
+        player2_label = tk.Label(self.window, text=self.config['player2_label'])
         player2_label.grid(row=3, column=0, padx=5, pady=5)
-        player2_name_label = tk.Label(self.window, text="Name:")
+        player2_name_label = tk.Label(self.window, text=self.config['name_label'])
         player2_name_label.grid(row=4, column=0, padx=5, pady=5)
         player2_name_entry = tk.Entry(self.window)
         player2_name_entry.grid(row=4, column=1, padx=5, pady=5)
-        symbol2_label = tk.Label(self.window, text="Symbol (X/O):")
+        symbol2_label = tk.Label(self.window, text=self.config['symbol_label'])
         symbol2_label.grid(row=5, column=0, padx=5, pady=5)
         symbol2_entry = tk.Entry(self.window)
         symbol2_entry.grid(row=5, column=1, padx=5, pady=5)
 
         start_button = tk.Button(
             self.window,
-            text="Start Game",
+            text=self.config['start_button'],
             command=lambda: self.start_game(
                 player1_name_entry.get(),
                 symbol1_entry.get(),
@@ -176,16 +186,16 @@ class TicTacToeGame:
         symbol2 = symbol2.strip().upper()
 
         if not player1_name or not symbol1 or not player2_name or not symbol2:
-            messagebox.showerror("Error", "All fields must be filled!")
+            messagebox.showerror("Error", self.config['input_error_message'])
             return False
         if symbol1 != "X" and symbol1 != "O":
-            messagebox.showerror("Error", "Symbol for Player 1 must be 'X' or 'O'!")
+            messagebox.showerror("Error", self.config['symbol_error_message'])
             return False
         if symbol2 != "X" and symbol2 != "O":
-            messagebox.showerror("Error", "Symbol for Player 2 must be 'X' or 'O'!")
+            messagebox.showerror("Error", self.config['symbol_error_message'])
             return False
         if symbol1 == symbol2:
-            messagebox.showerror("Error", "Symbols for Player 1 and Player 2 must be different!")
+            messagebox.showerror("Error", self.config['symbol_duplicate_error_message'])
             return False
 
         self.add_player(player1_name, symbol1)

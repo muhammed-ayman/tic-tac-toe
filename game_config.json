@@ -1,0 +1,9 @@
+{
+  "title": "Tic-Tac-Toe",
+  "player1_label": "Player 1",
+  "player2_label": "Player 2",
+  "name_label": "Name:",
+  "symbol_label": "Symbol (X/O):",
+  "start_button": "Start Game"
+}
+  
